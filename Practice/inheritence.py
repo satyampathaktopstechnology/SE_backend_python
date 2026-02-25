@@ -15,9 +15,6 @@
 # b1=B()
 # b1.show()
 
-
-
-
 # class car:
 #     def get_car_info(self,name,model_year):
 #         self.name=name
@@ -60,33 +57,33 @@
 # c2.get_car_info("bmw",2022)
 # c2.show_car_info()
 
-class tree():
-    def get_info(self,name ,colour):
-        self.name=name
-        self.colour=colour
+# class tree():
+#     def get_info(self,name ,colour):
+#         self.name=name
+#         self.colour=colour
     
 
-    def show_data(self):
-        print(self.name,self.colour)
+#     def show_data(self):
+#         print(self.name,self.colour)
 
-class inhritence(tree):
-    def get_info(self, name, colour,place):
-        self.place=place
-        return super().get_info(name, colour)
-    def show_data(self):
-        print(self.place)
-        return super().show_data()
+# class inhritence(tree):
+#     def get_info(self, name, colour,place):
+#         self.place=place
+#         return super().get_info(name, colour)
+#     def show_data(self):
+#         print(self.place)
+#         return super().show_data()
     
-class multipleinheritence(inhritence):
-    def get_info(self, name, colour, place,owner):
-        self.owner=owner
-        return super().get_info(name, colour, place)
+# class multipleinheritence(inhritence):
+#     def get_info(self, name, colour, place,owner):
+#         self.owner=owner
+#         return super().get_info(name, colour, place)
      
-    def show_data(self):
-        print(self.owner)
-        return super().show_data()
+#     def show_data(self):
+#         print(self.owner)
+#         return super().show_data()
+ 
 
-
-t=multipleinheritence()
-t.get_info("apple","red","kim","ashish")
-t.show_data()
+# t=multipleinheritence()
+# t.get_info("apple","red","kim","ashish")
+# t.show_data()
