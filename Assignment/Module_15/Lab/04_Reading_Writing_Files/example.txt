@@ -1,0 +1,2 @@
+I am Pathak Satyam.
+In This code file is reading and writting.
