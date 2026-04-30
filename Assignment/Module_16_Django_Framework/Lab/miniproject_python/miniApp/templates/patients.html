@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container mt-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Patient Management</h2>
+        <a href="{% url 'add_patient' %}" class="btn btn-primary">+ Add Patient</a>
+    </div>
+
+    <!-- Search -->
+    <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Search patients...">
+    </div>
+
+    <!-- Patient Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Email</th>
+                        <th>Condition</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in patients %}
+                    <!-- Example Row -->
+                    <tr>
+                        <td>{{i.name}}</td>
+                        <td>{{i.age}}</td>
+                        <td>{{i.email}}</td>
+                        <td>{{i.condition}}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary">Edit</button>
+                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+
+                    <!-- Empty State -->
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">
+                            No patients found
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

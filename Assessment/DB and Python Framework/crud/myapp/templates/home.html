@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    
+    <!-- 1. Edit Form Section -->
+    <div id="form-container" class="px-6 py-6 border-b border-gray-200 bg-gray-50/30 cstf">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Edit User Profile</h2>
+            <button onclick="clearForm()" class="text-xs text-blue-600 hover:text-blue-800 font-medium">Reset Form</button>
+        </div>
+        <form action="" method="post" id="edit-form" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+            {% csrf_token %}
+            <input type="hidden" id="edit_id" name="id">
+
+            <div class="md:col-span-3">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Username</label>
+                <input type="text" id="edit_username" name="username" required
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+            </div>
+
+            <div class="md:col-span-4">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Email Address</label>
+                <input type="email" id="edit_email" name="email" required
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition">
+            </div>
+
+            <div class="md:col-span-2 flex items-center mb-2">
+                <input type="checkbox" name="is_public" id="edit_is_public" class="w-4 h-4 text-blue-600 rounded border-gray-300">
+                <label class="ml-2 text-sm font-medium text-gray-700">Public</label>
+            </div>
+
+            <div class="md:col-span-3 flex gap-2">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-4 py-2 rounded-lg shadow-sm transition">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- 2. Table Section -->
+    <div class="w-full overflow-x-auto">
+        <table class="w-full min-w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-50/50">
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Profile</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Email</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Visibility</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for i in page_obj %}
+                <tr id="row-{{ i.id }}" class="hover:bg-blue-50/30 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                                {{ i.username|slice:":1"|upper }}
+                            </div>
+                            <span class="font-semibold text-gray-900">{{ i.username }}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">{{ i.email }}</td>
+                    <td class="px-6 py-4">
+                        {% if i.is_public %}
+                        <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Public</span>
+                        {% else %}
+                        <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">Private</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex justify-end space-x-2">
+                            <button onclick="edit({{i.id}})" class="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="del({{i.id}})" class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 3. Pagination -->
+    <div class="px-6 py-4 bg-gray-50/50 border-t flex items-center justify-between">
+        <p class="text-sm text-gray-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+        <div class="flex space-x-2">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="p-2 border rounded bg-white hover:bg-gray-50"><i data-lucide="chevron-left" class="w-4 h-4"></i></a>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="p-2 border rounded bg-white hover:bg-gray-50"><i data-lucide="chevron-right" class="w-4 h-4"></i></a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- <script>
+    function del(id) {
+        if (confirm("Delete this user?")) {
+            fetch(`/delete?id=${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "Deleted Successfully") {
+                        const row = document.getElementById(`row-${id}`);
+                        row.classList.add('opacity-0', 'transition-all', 'duration-300');
+                        setTimeout(() => row.remove(), 300);
+                    }
+                });
+        }
+    }
+
+    function edit(id) {
+        fetch(`/editpage?id=${id}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('edit_id').value = data.id;
+                document.getElementById('edit_username').value = data.username;
+                document.getElementById('edit_email').value = data.email;
+                document.getElementById('edit_is_public').checked = data.is_public;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+    }
+
+    function clearForm() {
+        document.getElementById('edit-form').reset();
+        document.getElementById('edit_id').value = "";
+    }
+</script> -->
+{% endblock %}

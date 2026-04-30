@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 85vh;">
+
+    <div class="card shadow p-4" style="width: 100%; max-width: 500px; border-radius: 15px;">
+        
+        <h3 class="text-center mb-4">Book Appointment</h3>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Patient Name -->
+            <div class="mb-3">
+                <label class="form-label">Select Patient</label>
+                <select name="patient" class="form-select" required>
+                    <option value="">-- Select Patient --</option>
+                    {% for p in patients %}
+                        <option value="{{ p.id }}">{{ p.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Date -->
+            <div class="mb-3">
+                <label class="form-label">Date</label>
+                <input type="date" name="date" class="form-control" required>
+            </div>
+
+            <!-- Time -->
+            <div class="mb-3">
+                <label class="form-label">Time</label>
+                <input type="time" name="time" class="form-control" required>
+            </div>
+
+            <!-- Doctor -->
+            <div class="mb-3">
+                <label class="form-label">Doctor</label>
+                <input type="text" name="doctor" class="form-control">
+            </div>
+
+            <!-- Notes -->
+            <div class="mb-3">
+                <label class="form-label">Notes</label>
+                <textarea name="notes" class="form-control" rows="3"></textarea>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">Book Appointment</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

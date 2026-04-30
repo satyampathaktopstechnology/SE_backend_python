@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block body %}
+
+
+<script>
+$(document).ready(function(){
+    statusfilter();
+});
+
+const statusfilter = () =>{
+    $("#statusFilter").change(function(){
+        let status = $(this).val();
+
+        $.ajax({
+            url: "/filter-appointments/",
+            type: "GET",
+            data: {
+                status: status
+            },
+            success: function(response){
+                $("#appointmentContainer").html(response);
+            }
+        });
+
+    });
+}
+
+const StatusEdit = (id) =>{
+    $.get("status-editor", {id:id}, function (rt){
+        PaymentAddress
+    })
+}
+
+
+</script>
+
+
+ 
+<div class="container mt-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Appointments</h2>
+        <a href="#" class="btn btn-success">+ Book Appointment</a>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-3">
+        <!-- <div class="col-md-4">
+            <input type="date" class="form-control">
+        </div> -->
+        <div class="col-md-4">
+            <select class="form-select" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Appointment Cards -->
+    <div class="row" id="appointmentContainer">
+        {% for i in appointments %}
+        <!-- Example Appointment -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">{{i.patient}}</h5>
+                    <p class="mb-1"><strong>Date:</strong> {{i.date}}</p>
+                    <p class="mb-1"><strong>Time:</strong> {{i.time}}</p>
+                    <p class="mb-2"><strong>Status:</strong> 
+                        <span class="badge bg-success" id="statusShow">{{i.status}}</span>
+                        <span id="statusEdited"></span>
+                        <button type="submit" id="status-edit" onclick="StatusEdit("{{i.id}}")" >🔄</button>
+                    </p>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-primary">Reschedule</button>
+                        <button class="btn btn-sm btn-outline-danger">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {%empty%}
+        <!-- Empty State -->
+        <div class="col-12 text-center text-muted">
+            No appointments available
+        </div>
+        {%endfor%}
+
+    </div>
+
+</div>
+
+{% endblock %}

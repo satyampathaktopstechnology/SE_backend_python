@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 85vh;">
+
+    <div class="card shadow p-4" style="width: 100%; max-width: 500px; border-radius: 15px;">
+        
+        <!-- Title -->
+        <h3 class="text-center mb-4">My Profile</h3>
+
+        <!-- User Info -->
+        <div class="mb-3">
+            <label class="text-muted">Full Name</label>
+            <div class="form-control">
+                {{ user.first_name|default:"Not provided" }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="text-muted">Username</label>
+            <div class="form-control">
+                {{ user.username }}
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="text-muted">Email</label>
+            <div class="form-control">
+                {{ user.email|default:"Not provided" }}
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-grid gap-2">
+
+            <!-- Edit Button -->
+            <a href="#" class="btn btn-primary">
+                Edit Profile
+            </a>
+
+            <!-- Delete Button -->
+            <button class="btn btn-danger" onclick="deleteUser()">
+                Delete Account
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function deleteUser(){
+    if(confirm("Are you sure you want to delete your account? This action cannot be undone.")){
+        window.location.href = "{% url 'delete_user' %}";
+    }
+}
+</script>
+
+{% endblock %}
